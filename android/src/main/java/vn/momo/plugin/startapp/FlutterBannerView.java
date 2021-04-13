@@ -48,7 +48,8 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
                     @Override
                     public void onImpression(View view) {}
                 });
-                banner.loadAd(400, 100);
+//                banner.loadAd(400, 100);
+                banner.loadAd();
                 break;
             default:
                 result.notImplemented();
