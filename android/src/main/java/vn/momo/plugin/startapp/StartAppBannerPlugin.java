@@ -98,6 +98,13 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                             });
                             result.success(null);
                             break;
+                        case "init" :
+                            String app_id = call.argument("app_id");
+                            assert app_id != null;
+                            StartAppSDK.init(mainActivity,app_id);
+                            Log.i("start_app" ,"init app_id start.io : "+app_id);
+                            result.success(null);
+                            break;
                         default:
                             result.notImplemented();
                     }

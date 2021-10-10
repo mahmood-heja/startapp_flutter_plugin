@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 
 import com.startapp.sdk.ads.banner.Banner;
 import com.startapp.sdk.ads.banner.BannerListener;
+import com.startapp.sdk.adsbase.StartAppSDK;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
@@ -18,8 +19,10 @@ import io.flutter.plugin.platform.PlatformView;
  */
 public class FlutterBannerView implements PlatformView, MethodChannel.MethodCallHandler {
     private final FrameLayout bannerContainer;
+    private final Context context;
 
     FlutterBannerView(Context context, BinaryMessenger messenger, int id) {
+        this.context = context;
         bannerContainer = new FrameLayout(context);
         new MethodChannel(messenger, StartAppBannerPlugin.PLUGIN_KEY + "_" + id)
                 .setMethodCallHandler(this);

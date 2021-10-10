@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 typedef void BannerCreatedCallback(BannerController controller);
 typedef StringToVoidFunc = void Function(String);
+
 const String PLUGIN_KEY = "vn.momo.plugin.startapp.StartAppBannerPlugin";
 
 class StartApp {
@@ -13,13 +14,23 @@ class StartApp {
   static VoidCallback onReceiveAd;
   static StringToVoidFunc onFailedToReceiveAd;
 
+  static init(String appId) async {
+    await platform.invokeMethod(
+      'init',
+      <String, dynamic>{
+        'app_id': appId,
+      },
+    );
+  }
+
   static showInterstitialAd() async {
     await platform.invokeMethod('showAd');
   }
 
-  static showRewardedAd({VoidCallback onVideoCompleted,
-    VoidCallback onReceiveAd,
-    StringToVoidFunc onFailedToReceiveAd}) async {
+  static showRewardedAd(
+      {VoidCallback onVideoCompleted,
+      VoidCallback onReceiveAd,
+      StringToVoidFunc onFailedToReceiveAd}) async {
     StartApp.onVideoCompleted = onVideoCompleted;
     platform.setMethodCallHandler(_handleMethod);
     await platform.invokeMethod('showRewardedAd');
