@@ -44,6 +44,7 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
                     @Override
                     public void onFailedToReceiveAd(View banner) {
+                        bannerContainer.setVisibility(View.GONE);
                         Log.e("start.io", "banner onFailedToReceiveAd");
                         methodChannel.invokeMethod("onFailedToReceiveAd",null);
                     }
