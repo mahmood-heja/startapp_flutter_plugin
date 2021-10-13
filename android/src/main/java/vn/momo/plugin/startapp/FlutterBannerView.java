@@ -1,6 +1,7 @@
 package vn.momo.plugin.startapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -43,6 +44,7 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
                     @Override
                     public void onFailedToReceiveAd(View banner) {
+                        Log.e("start.io", "banner onFailedToReceiveAd");
                         methodChannel.invokeMethod("onFailedToReceiveAd",null);
                     }
 
