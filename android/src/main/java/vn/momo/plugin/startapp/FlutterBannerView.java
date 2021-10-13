@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 
 import com.startapp.sdk.ads.banner.Banner;
 import com.startapp.sdk.ads.banner.BannerListener;
+import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
 
 import io.flutter.plugin.common.BinaryMessenger;
@@ -20,16 +21,18 @@ import io.flutter.plugin.platform.PlatformView;
 public class FlutterBannerView implements PlatformView, MethodChannel.MethodCallHandler {
     private final FrameLayout bannerContainer;
     private final Context context;
+    private final MethodChannel methodChannel;
 
     FlutterBannerView(Context context, BinaryMessenger messenger, int id) {
         this.context = context;
         bannerContainer = new FrameLayout(context);
-        new MethodChannel(messenger, StartAppBannerPlugin.PLUGIN_KEY + "_" + id)
-                .setMethodCallHandler(this);
+        methodChannel = new MethodChannel(messenger, StartAppBannerPlugin.PLUGIN_KEY + "_" + id);
+        methodChannel.setMethodCallHandler(this);
     }
 
     @Override
     public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
+
         switch (methodCall.method) {
             case "loadAd":
                 Banner banner = new Banner(StartAppBannerPlugin.activity(), new BannerListener() {
@@ -40,7 +43,7 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
                     @Override
                     public void onFailedToReceiveAd(View banner) {
-                        updateContent(banner);
+                        methodChannel.invokeMethod("onFailedToReceiveAd",null);
                     }
 
                     @Override
@@ -49,7 +52,8 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
                     }
 
                     @Override
-                    public void onImpression(View view) {}
+                    public void onImpression(View view) {
+                    }
                 });
 //                banner.loadAd(400, 100);
                 banner.loadAd();

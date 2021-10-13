@@ -62,25 +62,35 @@ class AdBanner extends StatefulWidget {
   const AdBanner({
     Key key,
     this.onCreated,
+    this.onFailedToReceiveAd,
   }) : super(key: key);
 
   final BannerCreatedCallback onCreated;
+  final Function onFailedToReceiveAd;
 
   @override
   State<AdBanner> createState() => _BannerState();
 }
 
 class _BannerState extends State<AdBanner> {
+  bool faildToLoad = false;
+
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return Container(
-          width: 400.0,
-          height: 100.0,
-          child: AndroidView(
-            viewType: PLUGIN_KEY,
-            onPlatformViewCreated: _onPlatformViewCreated,
-          ));
+      return faildToLoad
+          ? SizedBox(
+              width: 0,
+              height: 0,
+            )
+          : Container(
+              width: 400.0,
+              height: 100.0,
+              child: AndroidView(
+                viewType: PLUGIN_KEY,
+                onPlatformViewCreated: _onPlatformViewCreated,
+              ),
+            );
     }
     return Text('$defaultTargetPlatform is no need showing ads');
   }
@@ -88,10 +98,24 @@ class _BannerState extends State<AdBanner> {
   void _onPlatformViewCreated(int id) {
     BannerController controller = new BannerController._(id);
     controller.loadAd();
+
+    controller._channel.setMethodCallHandler(methodCallHandler);
+
     if (widget.onCreated == null) {
       return;
     }
     widget.onCreated(controller);
+  }
+
+  Future methodCallHandler(MethodCall call) async {
+    if (call.method == "onFailedToReceiveAd") {
+      widget.onFailedToReceiveAd?.call();
+      faildToLoad = true;
+      if(mounted)
+        setState(() {
+
+        });
+    }
   }
 }
 
