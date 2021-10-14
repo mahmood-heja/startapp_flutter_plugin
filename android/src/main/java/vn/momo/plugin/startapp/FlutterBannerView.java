@@ -62,10 +62,11 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
                 }
             });
 //                banner.loadAd(400, 100);
-            if (getSharedPreferences().getBoolean(IS_BLOCKED_KEY, false))
-                banner.loadAd();
-            else
+            if (getSharedPreferences().getBoolean(IS_BLOCKED_KEY, false)) {
                 bannerContainer.removeAllViews();
+            } else {
+                banner.loadAd();
+            }
         } else {
             result.notImplemented();
         }
