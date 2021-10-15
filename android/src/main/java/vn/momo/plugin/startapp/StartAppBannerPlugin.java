@@ -158,6 +158,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
 
         mainActivity = activity;
         startAppAd = new StartAppAd(context);
+        LimitAdClickUtils.init(mainActivity);
     }
 
     @Override

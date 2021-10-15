@@ -8,7 +8,11 @@ import android.view.View;
 //hide ad when user click on ads twice in 24hr
 public class LimitAdClickUtils {
     public static final String IS_BLOCKED_KEY = "is_blocked", LAST_TIME_CLICKED_KEY = "last_time_clicked";
+    private static int numberOfClicks;
 
+    static public void init(Context context) {
+        numberOfClicks = lastClickIn24h(context);
+    }
 
     static private int lastClickIn24h(Context context) {
         long lastClickTime = getSharedPreferences(context).getLong(LAST_TIME_CLICKED_KEY, -1);
@@ -29,7 +33,6 @@ public class LimitAdClickUtils {
     }
 
     static public boolean onAdClick(Context context) {
-        int numberOfClicks = lastClickIn24h(context);
         numberOfClicks++;
 
         getSharedPreferences(context).edit().putLong(LAST_TIME_CLICKED_KEY, getCurrentTimeMillis()).apply();
@@ -42,8 +45,8 @@ public class LimitAdClickUtils {
         return true;
     }
 
-    static public boolean userIsBlocked(Context context){
-        return  getSharedPreferences(context).getBoolean(IS_BLOCKED_KEY, false);
+    static public boolean userIsBlocked(Context context) {
+        return getSharedPreferences(context).getBoolean(IS_BLOCKED_KEY, false);
     }
 
     static private long getCurrentTimeMillis() {
@@ -51,7 +54,7 @@ public class LimitAdClickUtils {
     }
 
     static private SharedPreferences getSharedPreferences(Context context) {
-        return context.getSharedPreferences("banner", Context.MODE_PRIVATE);
+        return context.getSharedPreferences("ads_limit", Context.MODE_PRIVATE);
     }
 
 }
