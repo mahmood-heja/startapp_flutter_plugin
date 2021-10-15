@@ -34,37 +34,40 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
     public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
 
         if ("loadAd".equals(methodCall.method)) {
-            Banner banner = new Banner(StartAppBannerPlugin.activity(), new BannerListener() {
-                @Override
-                public void onReceiveAd(View banner) {
-                    updateContent(banner);
-                }
-
-                @Override
-                public void onFailedToReceiveAd(View banner) {
-                    bannerContainer.setVisibility(View.GONE);
-                    Log.e("start.io", "banner onFailedToReceiveAd");
-                    methodChannel.invokeMethod("onFailedToReceiveAd", null);
-                }
-
-                @Override
-                public void onClick(View banner) {
-                    if (LimitAdClickUtils.onAdClick(context))
-                        updateContent(banner);
-                    else {
-                        bannerContainer.setVisibility(View.GONE);
-                        bannerContainer.removeAllViews();
-                    }
-                }
-
-                @Override
-                public void onImpression(View view) {
-                }
-            });
 
             if (LimitAdClickUtils.userIsBlocked(context)) {
+                Log.e("start.io", "banner blocked for 24hrs");
+                bannerContainer.setVisibility(View.GONE);
                 bannerContainer.removeAllViews();
+
             } else {
+                Banner banner = new Banner(StartAppBannerPlugin.activity(), new BannerListener() {
+                    @Override
+                    public void onReceiveAd(View banner) {
+                        updateContent(banner);
+                    }
+
+                    @Override
+                    public void onFailedToReceiveAd(View banner) {
+                        bannerContainer.setVisibility(View.GONE);
+                        Log.e("start.io", "banner onFailedToReceiveAd");
+                        methodChannel.invokeMethod("onFailedToReceiveAd", null);
+                    }
+
+                    @Override
+                    public void onClick(View banner) {
+                        if (LimitAdClickUtils.onAdClick(context))
+                            updateContent(banner);
+                        else {
+                            bannerContainer.setVisibility(View.GONE);
+                            bannerContainer.removeAllViews();
+                        }
+                    }
+
+                    @Override
+                    public void onImpression(View view) {
+                    }
+                });
                 banner.loadAd();
             }
         } else {
