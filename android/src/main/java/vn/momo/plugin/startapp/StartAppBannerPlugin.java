@@ -10,6 +10,7 @@ import android.util.Log;
 import com.startapp.sdk.adsbase.Ad;
 import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
+import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
 import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import androidx.annotation.NonNull;
@@ -72,8 +73,31 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                 (call, result) -> {
                     switch (call.method) {
                         case "showAd":
-                            StartAppAd.showAd(mainActivity);
-                            result.success(null);
+                            if (LimitAdClickUtils.userIsBlocked(mainActivity)) {
+                                new StartAppAd(mainActivity).showAd(new AdDisplayListener() {
+                                    @Override
+                                    public void adHidden(Ad ad) {
+
+                                    }
+
+                                    @Override
+                                    public void adDisplayed(Ad ad) {
+
+                                    }
+
+                                    @Override
+                                    public void adClicked(Ad ad) {
+                                        LimitAdClickUtils.onAdClick(mainActivity);
+                                    }
+
+                                    @Override
+                                    public void adNotDisplayed(Ad ad) {
+
+                                    }
+                                });
+                                result.success(null);
+                            } else
+                                result.error("User blocked for 24h", null, null);
                             break;
                         case "showRewardedAd":
                             startAppAd.setVideoListener(() -> {
@@ -98,12 +122,12 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                             });
                             result.success(null);
                             break;
-                        case "init" :
+                        case "init":
                             String app_id = call.argument("app_id");
                             assert app_id != null;
 //                            StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
-                            StartAppSDK.init(mainActivity,app_id);
-                            Log.i("start_app" ,"init app_id start.io : "+app_id);
+                            StartAppSDK.init(mainActivity, app_id);
+                            Log.i("start_app", "init app_id start.io : " + app_id);
                             result.success(null);
                             break;
                         default:
@@ -121,7 +145,8 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                     .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
             splashAppEnabled = bundle.getBoolean(STARTAPP_SPLASH_AD_ENABLED_KEY, true);
-        } catch (PackageManager.NameNotFoundException ignored) {}
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
 
         if (!splashAppEnabled) {
             StartAppAd.disableSplash();
