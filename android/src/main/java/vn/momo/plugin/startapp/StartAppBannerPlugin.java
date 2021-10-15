@@ -74,6 +74,8 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                     switch (call.method) {
                         case "showAd":
                             if (LimitAdClickUtils.userIsBlocked(mainActivity)) {
+                                result.error("User blocked for 24h", null, null);
+                            } else{
                                 new StartAppAd(mainActivity).showAd(new AdDisplayListener() {
                                     @Override
                                     public void adHidden(Ad ad) {
@@ -96,8 +98,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                                     }
                                 });
                                 result.success(null);
-                            } else
-                                result.error("User blocked for 24h", null, null);
+                            }
                             break;
                         case "showRewardedAd":
                             startAppAd.setVideoListener(() -> {
