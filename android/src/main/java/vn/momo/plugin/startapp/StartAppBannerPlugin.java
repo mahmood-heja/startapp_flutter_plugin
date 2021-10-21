@@ -75,7 +75,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                         case "showAd":
                             if (LimitAdClickUtils.userIsBlocked(mainActivity)) {
                                 result.error("User blocked for 24h", null, null);
-                            } else{
+                            } else {
                                 new StartAppAd(mainActivity).showAd(new AdDisplayListener() {
                                     @Override
                                     public void adHidden(Ad ad) {
@@ -125,7 +125,10 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                             break;
                         case "init":
                             String app_id = call.argument("app_id");
-                            assert app_id != null;
+                            if (app_id == null) {
+                                result.error("start.io init: app id must not be null", null, null);
+                                break;
+                            }
                             StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
                             StartAppSDK.init(mainActivity, app_id);
                             Log.i("start_app", "init app_id start.io : " + app_id);
