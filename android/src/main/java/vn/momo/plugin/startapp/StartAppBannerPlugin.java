@@ -134,6 +134,14 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                             Log.i("start_app", "init app_id start.io : " + app_id);
                             result.success(null);
                             break;
+                        case "enableReturnAds" :
+                            Boolean enable = call.argument("enableReturnAds");
+                            if(enable == null)
+                                enable = false;
+
+                            StartAppSDK.enableReturnAds(enable);
+                            result.success(null);
+                            break;
                         default:
                             result.notImplemented();
                     }

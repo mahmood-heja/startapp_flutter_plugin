@@ -23,6 +23,15 @@ class StartApp {
     );
   }
 
+  static enableReturnAds(bool enableReturnAds) async {
+    await platform.invokeMethod(
+      'enableReturnAds',
+      <String, dynamic>{
+        'enableReturnAds': enableReturnAds,
+      },
+    );
+  }
+
   static showInterstitialAd() async {
     await platform.invokeMethod('showAd');
   }
