@@ -32,30 +32,29 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
     static final String PLUGIN_KEY = "vn.momo.plugin.startapp.StartAppBannerPlugin";
     private static final String STARTAPP_SPLASH_AD_ENABLED_KEY = "vn.momo.plugin.startapp.SPLASH_AD_ENABLED";
 
-    private static Activity mainActivity;
-    private static StartAppAd startAppAd;
+    private  Activity mainActivity;
+    private  StartAppAd startAppAd;
 
-    /**
-     * still contain the static registerWith() method to remain compatible
-     * with apps that don’t use the v2 Android embedding
+    /*
+      still contain the static registerWith() method to remain compatible
+      with apps that don’t use the v2 Android embedding
      */
-    public static void registerWith(Registrar registrar) {
-        bindActivity(registrar.activity());
-        pluginLogic(registrar.platformViewRegistry(), registrar.messenger());
-    }
+//    public static void registerWith(Registrar registrar) {
+//        bindActivity(registrar.activity());
+//        pluginLogic(registrar.platformViewRegistry(), registrar.messenger());
+//    }
 
     /**
      * Dev still finding a better solution to not keep {@link Activity} as a static field.
-     * Keep the method to support embedding v1 logic - using {@link StartAppBannerPlugin#registerWith(Registrar)}
+     * Keep the method to support embedding v1 logic - using {@link StartAppBannerPlugin#(Registrar)}
      */
-    static Activity activity() {
+    Activity activity() {
         return mainActivity;
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
-        pluginLogic(binding.getPlatformViewRegistry(),
-                binding.getBinaryMessenger());
+        pluginLogic(binding.getPlatformViewRegistry(), binding.getBinaryMessenger());
     }
 
     @Override
@@ -63,7 +62,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
 
     }
 
-    private static void pluginLogic(PlatformViewRegistry platformViewRegistry,
+    private void pluginLogic(PlatformViewRegistry platformViewRegistry,
                                     BinaryMessenger messenger) {
 
         platformViewRegistry.registerViewFactory(PLUGIN_KEY, new BannerFactory(messenger));
@@ -107,7 +106,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                             });
                             startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO, new AdEventListener() {
                                 @Override
-                                public void onReceiveAd(Ad ad) {
+                                public void onReceiveAd(@NonNull Ad ad) {
                                     startAppAd.showAd();
                                     channel.invokeMethod("onReceiveAd", null);
                                 }
@@ -148,7 +147,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                 });
     }
 
-    private static void bindActivity(Activity activity) {
+    private  void bindActivity(Activity activity) {
         Context context = activity.getApplicationContext();
 
         boolean splashAppEnabled = true;
