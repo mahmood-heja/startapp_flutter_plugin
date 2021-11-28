@@ -47,7 +47,7 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
                 bannerContainer.removeAllViews();
 
             } else {
-                Banner banner = new Banner(context, new BannerListener() {
+                Banner banner = new Banner(activity, new BannerListener() {
                     @Override
                     public void onReceiveAd(View banner) {
                         updateContent(banner);

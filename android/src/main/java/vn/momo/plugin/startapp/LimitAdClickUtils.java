@@ -2,7 +2,6 @@ package vn.momo.plugin.startapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.View;
 
 //used for limit user click on ads
 //hide ad when user click on ads twice in 24hr

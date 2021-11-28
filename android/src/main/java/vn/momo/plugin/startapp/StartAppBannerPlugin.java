@@ -7,13 +7,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.startapp.sdk.adsbase.Ad;
 import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
 import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
 import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
-
-import androidx.annotation.NonNull;
 
 import io.flutter.BuildConfig;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -21,7 +21,6 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.platform.PlatformViewRegistry;
 
 /**
@@ -39,18 +38,11 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
       still contain the static registerWith() method to remain compatible
       with apps that don’t use the v2 Android embedding
      */
-//    public static void registerWith(Registrar registrar) {
-//        bindActivity(registrar.activity());
-//        pluginLogic(registrar.platformViewRegistry(), registrar.messenger());
-//    }
 
-    /**
+    /*
      * Dev still finding a better solution to not keep {@link Activity} as a static field.
      * Keep the method to support embedding v1 logic - using {@link StartAppBannerPlugin#(Registrar)}
      */
-    Activity activity() {
-        return mainActivity;
-    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
@@ -75,7 +67,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                             if (LimitAdClickUtils.userIsBlocked(mainActivity)) {
                                 result.error("User blocked for 24h", null, null);
                             } else {
-                                new StartAppAd(mainActivity).showAd(new AdDisplayListener() {
+                                startAppAd.showAd(new AdDisplayListener() {
                                     @Override
                                     public void adHidden(Ad ad) {
 
