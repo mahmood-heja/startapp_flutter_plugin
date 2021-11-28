@@ -14,16 +14,14 @@ import io.flutter.plugin.platform.PlatformViewFactory;
  */
 public class BannerFactory extends PlatformViewFactory {
     private final BinaryMessenger messenger;
-    private final Activity activity;
 
-    BannerFactory(BinaryMessenger messenger, Activity activity) {
+    BannerFactory(BinaryMessenger messenger) {
         super(StandardMessageCodec.INSTANCE);
         this.messenger = messenger;
-        this.activity = activity;
     }
 
     @Override
     public PlatformView create(Context context, int id, Object o) {
-        return new FlutterBannerView(activity, messenger, id);
+        return new FlutterBannerView(context, messenger, id);
     }
 }

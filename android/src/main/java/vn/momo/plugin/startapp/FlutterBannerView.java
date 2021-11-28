@@ -1,6 +1,6 @@
 package vn.momo.plugin.startapp;
 
-import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -24,11 +24,11 @@ import io.flutter.plugin.platform.PlatformView;
 public class FlutterBannerView implements PlatformView, MethodChannel.MethodCallHandler, ActivityAware {
 
     private final FrameLayout bannerContainer;
-    private final Activity activity;
+    private final Context context;
     private final MethodChannel methodChannel;
 
-    FlutterBannerView(Activity context, BinaryMessenger messenger, int id) {
-        this.activity = context;
+    FlutterBannerView(Context context, BinaryMessenger messenger, int id) {
+        this.context = context;
         bannerContainer = new FrameLayout(context);
         methodChannel = new MethodChannel(messenger, StartAppBannerPlugin.PLUGIN_KEY + "_" + id);
         methodChannel.setMethodCallHandler(this);
@@ -39,14 +39,14 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
         if ("loadAd".equals(methodCall.method)) {
 
-            if (LimitAdClickUtils.userIsBlocked(activity)) {
+            if (LimitAdClickUtils.userIsBlocked(context)) {
                 Log.e("start.io", "banner blocked for 24hrs");
                 bannerContainer.setVisibility(View.GONE);
                 bannerContainer.removeAllViews();
 
             } else {
                 try {
-                    Banner banner = new Banner(activity, new BannerListener() {
+                    Banner banner = new Banner(StartAppBannerPlugin.getActivity(), new BannerListener() {
                         @Override
                         public void onReceiveAd(View banner) {
                             updateContent(banner);
@@ -61,7 +61,7 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
                         @Override
                         public void onClick(View banner) {
-                            if (LimitAdClickUtils.onAdClick(activity))
+                            if (LimitAdClickUtils.onAdClick(context))
                                 updateContent(banner);
                             else {
                                 bannerContainer.setVisibility(View.GONE);

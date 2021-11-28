@@ -16,7 +16,6 @@ import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
 import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import io.flutter.BuildConfig;
-import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -28,11 +27,11 @@ import io.flutter.plugin.platform.PlatformViewRegistry;
  * @author dungvu
  * @since 2019-06-04
  */
-public class StartAppBannerPlugin extends FlutterActivity implements FlutterPlugin, ActivityAware {
+public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
     static final String PLUGIN_KEY = "vn.momo.plugin.startapp.StartAppBannerPlugin";
     private static final String STARTAPP_SPLASH_AD_ENABLED_KEY = "vn.momo.plugin.startapp.SPLASH_AD_ENABLED";
 
-    private  Activity mainActivity;
+    private static  Activity mainActivity;
     private  StartAppAd startAppAd;
 
     /*
@@ -44,6 +43,9 @@ public class StartAppBannerPlugin extends FlutterActivity implements FlutterPlug
      * Dev still finding a better solution to not keep {@link Activity} as a static field.
      * Keep the method to support embedding v1 logic - using {@link StartAppBannerPlugin#(Registrar)}
      */
+    public  static  Activity getActivity(){
+        return  mainActivity;
+    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
@@ -58,8 +60,7 @@ public class StartAppBannerPlugin extends FlutterActivity implements FlutterPlug
     private void pluginLogic(PlatformViewRegistry platformViewRegistry,
                                     BinaryMessenger messenger) {
 
-        platformViewRegistry.registerViewFactory(PLUGIN_KEY, new BannerFactory(messenger, getActivity()));
-
+        platformViewRegistry.registerViewFactory(PLUGIN_KEY, new BannerFactory(messenger));
 
         final MethodChannel channel = new MethodChannel(messenger, "flutter_startapp");
         channel.setMethodCallHandler(
