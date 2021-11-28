@@ -45,34 +45,39 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
                 bannerContainer.removeAllViews();
 
             } else {
-                Banner banner = new Banner(activity, new BannerListener() {
-                    @Override
-                    public void onReceiveAd(View banner) {
-                        updateContent(banner);
-                    }
-
-                    @Override
-                    public void onFailedToReceiveAd(View banner) {
-                        bannerContainer.setVisibility(View.GONE);
-                        Log.e("start.io", "banner onFailedToReceiveAd");
-                        methodChannel.invokeMethod("onFailedToReceiveAd", null);
-                    }
-
-                    @Override
-                    public void onClick(View banner) {
-                        if (LimitAdClickUtils.onAdClick(activity))
+                try {
+                    Banner banner = new Banner(activity, new BannerListener() {
+                        @Override
+                        public void onReceiveAd(View banner) {
                             updateContent(banner);
-                        else {
-                            bannerContainer.setVisibility(View.GONE);
-                            bannerContainer.removeAllViews();
                         }
-                    }
 
-                    @Override
-                    public void onImpression(View view) {
-                    }
-                });
-                banner.loadAd();
+                        @Override
+                        public void onFailedToReceiveAd(View banner) {
+                            bannerContainer.setVisibility(View.GONE);
+                            Log.e("start.io", "banner onFailedToReceiveAd");
+                            methodChannel.invokeMethod("onFailedToReceiveAd", null);
+                        }
+
+                        @Override
+                        public void onClick(View banner) {
+                            if (LimitAdClickUtils.onAdClick(activity))
+                                updateContent(banner);
+                            else {
+                                bannerContainer.setVisibility(View.GONE);
+                                bannerContainer.removeAllViews();
+                            }
+                        }
+
+                        @Override
+                        public void onImpression(View view) {
+                        }
+                    });
+                    banner.loadAd();
+                } catch (Exception e){
+                    Log.e("start.io","banner onFailedToReceiveAd with e : "+e.getMessage());
+                    methodChannel.invokeMethod("onFailedToReceiveAd", null);
+                }
             }
         } else {
             result.notImplemented();
