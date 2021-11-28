@@ -16,6 +16,7 @@ import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
 import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import io.flutter.BuildConfig;
+import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -27,7 +28,7 @@ import io.flutter.plugin.platform.PlatformViewRegistry;
  * @author dungvu
  * @since 2019-06-04
  */
-public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
+public class StartAppBannerPlugin extends FlutterActivity implements FlutterPlugin, ActivityAware {
     static final String PLUGIN_KEY = "vn.momo.plugin.startapp.StartAppBannerPlugin";
     private static final String STARTAPP_SPLASH_AD_ENABLED_KEY = "vn.momo.plugin.startapp.SPLASH_AD_ENABLED";
 
@@ -57,7 +58,8 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
     private void pluginLogic(PlatformViewRegistry platformViewRegistry,
                                     BinaryMessenger messenger) {
 
-        platformViewRegistry.registerViewFactory(PLUGIN_KEY, new BannerFactory(messenger, mainActivity));
+        platformViewRegistry.registerViewFactory(PLUGIN_KEY, new BannerFactory(messenger, getActivity()));
+
 
         final MethodChannel channel = new MethodChannel(messenger, "flutter_startapp");
         channel.setMethodCallHandler(

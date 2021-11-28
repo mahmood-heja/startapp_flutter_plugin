@@ -18,6 +18,9 @@
             android:theme="@android:style/Theme"
             tools:replace="android:configChanges"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity android:name=".StartAppBannerPlugin"/>
+
     </application>
 
 
