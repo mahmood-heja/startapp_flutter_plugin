@@ -1,7 +1,6 @@
 package vn.momo.plugin.startapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -25,12 +24,11 @@ import io.flutter.plugin.platform.PlatformView;
 public class FlutterBannerView implements PlatformView, MethodChannel.MethodCallHandler, ActivityAware {
 
     private final FrameLayout bannerContainer;
-    private final Context context;
+    private final Activity activity;
     private final MethodChannel methodChannel;
-    private Activity activity;
 
-    FlutterBannerView(Context context, BinaryMessenger messenger, int id) {
-        this.context = context;
+    FlutterBannerView(Activity context, BinaryMessenger messenger, int id) {
+        this.activity = context;
         bannerContainer = new FrameLayout(context);
         methodChannel = new MethodChannel(messenger, StartAppBannerPlugin.PLUGIN_KEY + "_" + id);
         methodChannel.setMethodCallHandler(this);
@@ -41,7 +39,7 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
         if ("loadAd".equals(methodCall.method)) {
 
-            if (LimitAdClickUtils.userIsBlocked(context)) {
+            if (LimitAdClickUtils.userIsBlocked(activity)) {
                 Log.e("start.io", "banner blocked for 24hrs");
                 bannerContainer.setVisibility(View.GONE);
                 bannerContainer.removeAllViews();
@@ -62,7 +60,7 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
                     @Override
                     public void onClick(View banner) {
-                        if (LimitAdClickUtils.onAdClick(context))
+                        if (LimitAdClickUtils.onAdClick(activity))
                             updateContent(banner);
                         else {
                             bannerContainer.setVisibility(View.GONE);
@@ -99,7 +97,6 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding activityPluginBinding) {
-        this.activity = activityPluginBinding.getActivity();
     }
 
     @Override
@@ -109,7 +106,6 @@ public class FlutterBannerView implements PlatformView, MethodChannel.MethodCall
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding activityPluginBinding) {
-        this.activity = activityPluginBinding.getActivity();
     }
 
     @Override

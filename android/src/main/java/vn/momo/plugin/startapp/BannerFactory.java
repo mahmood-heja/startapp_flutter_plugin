@@ -1,5 +1,6 @@
 package vn.momo.plugin.startapp;
 
+import android.app.Activity;
 import android.content.Context;
 
 import io.flutter.plugin.common.BinaryMessenger;
@@ -13,14 +14,16 @@ import io.flutter.plugin.platform.PlatformViewFactory;
  */
 public class BannerFactory extends PlatformViewFactory {
     private final BinaryMessenger messenger;
+    private final Activity activity;
 
-    BannerFactory(BinaryMessenger messenger) {
+    BannerFactory(BinaryMessenger messenger, Activity activity) {
         super(StandardMessageCodec.INSTANCE);
         this.messenger = messenger;
+        this.activity = activity;
     }
 
     @Override
     public PlatformView create(Context context, int id, Object o) {
-        return new FlutterBannerView(context, messenger, id);
+        return new FlutterBannerView(activity, messenger, id);
     }
 }

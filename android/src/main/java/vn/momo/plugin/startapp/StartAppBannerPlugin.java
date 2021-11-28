@@ -57,7 +57,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
     private void pluginLogic(PlatformViewRegistry platformViewRegistry,
                                     BinaryMessenger messenger) {
 
-        platformViewRegistry.registerViewFactory(PLUGIN_KEY, new BannerFactory(messenger));
+        platformViewRegistry.registerViewFactory(PLUGIN_KEY, new BannerFactory(messenger, mainActivity));
 
         final MethodChannel channel = new MethodChannel(messenger, "flutter_startapp");
         channel.setMethodCallHandler(
