@@ -2,6 +2,7 @@ package vn.momo.plugin.startapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -125,8 +126,12 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                                 result.error("start.io init: app id must not be null", null, null);
                                 break;
                             }
+                            SharedPreferences preferences = StartAppSDK.getExtras(mainActivity);
+                            Log.i("start_app preferences", preferences.toString());
+
+
                             StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
-                            StartAppSDK.init(mainActivity, app_id);
+                            StartAppSDK.init(mainActivity, app_id,true);
                             Log.i("start_app", "init app_id start.io : " + app_id);
                             result.success(null);
                             break;
