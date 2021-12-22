@@ -126,13 +126,6 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                                 result.error("start.io init: app id must not be null", null, null);
                                 break;
                             }
-                            SharedPreferences preferences = StartAppSDK.getExtras(mainActivity);
-                            try {
-                                Log.i("start_app preferences", preferences.getAll().toString());
-                                Log.i("start_app preferences", startAppAd.getExtraData().toString());
-                            }catch (Exception e){
-                                Log.e("start_app preferences", e.toString());
-                            }
 
                             StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
                             StartAppSDK.init(mainActivity, app_id,true);

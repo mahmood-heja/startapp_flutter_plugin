@@ -2,24 +2,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="vn.momo.plugin.startapp">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" tools:node="remove"/>
+    <uses-permission android:name="android.permission.Ad_ID" />
+
+
 
 
     <application>
-        <provider
-            android:name="com.startapp.android.publish.adsCommon.StartAppInitProvider"
-            android:authorities="${applicationId}.startappinitprovider"
-            tools:node="remove" />
-        <activity android:name="com.startapp.android.publish.adsCommon.activities.FullScreenActivity"
-            android:theme="@android:style/Theme"
-            tools:replace="android:configChanges"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <!--        <provider-->
+        <!--            android:name="com.startapp.android.publish.adsCommon.StartAppInitProvider"-->
+        <!--            android:authorities="${applicationId}.startappinitprovider"-->
+        <!--            tools:node="remove" />-->
 
-        <activity android:name=".StartAppBannerPlugin"/>
+        <!--        <activity-->
+        <!--            android:name="com.startapp.android.publish.adsCommon.activities.FullScreenActivity"-->
+        <!--            android:configChanges="orientation|keyboardHidden|screenSize"-->
+        <!--            android:theme="@android:style/Theme"-->
+        <!--            tools:replace="android:configChanges" />-->
+
+        <!--        <activity android:name=".StartAppBannerPlugin" />-->
+
+        <provider
+            android:name="com.startapp.sdk.adsbase.StartAppInitProvider"
+            android:authorities="${applicationId}.startappinitprovider"
+            android:exported="false" />
+
+        <activity
+            android:name="com.startapp.sdk.adsbase.consent.ConsentActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name="com.startapp.sdk.ads.list3d.List3DActivity"
+            android:theme="@android:style/Theme" />
+        <activity
+            android:name="com.startapp.sdk.ads.interstitials.OverlayActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <service android:name="com.startapp.sdk.cachedservice.BackgroundService" />
+        <service
+            android:name="com.startapp.sdk.jobs.SchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name="com.startapp.sdk.adsbase.remoteconfig.BootCompleteListener">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
