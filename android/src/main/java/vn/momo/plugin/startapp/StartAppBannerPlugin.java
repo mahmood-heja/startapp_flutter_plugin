@@ -90,6 +90,8 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                                     public void adNotDisplayed(Ad ad) {
 
                                     }
+
+
                                 });
                                 result.success(null);
                             }
