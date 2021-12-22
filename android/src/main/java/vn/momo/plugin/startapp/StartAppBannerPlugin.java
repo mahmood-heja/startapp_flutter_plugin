@@ -127,8 +127,12 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                                 break;
                             }
                             SharedPreferences preferences = StartAppSDK.getExtras(mainActivity);
-                            Log.i("start_app preferences", preferences.toString());
-
+                            try {
+                                Log.i("start_app preferences", preferences.getAll().toString());
+                                Log.i("start_app preferences", startAppAd.getAdId());
+                            }catch (Exception e){
+                                Log.e("start_app preferences", e.toString());
+                            }
 
                             StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
                             StartAppSDK.init(mainActivity, app_id,true);
