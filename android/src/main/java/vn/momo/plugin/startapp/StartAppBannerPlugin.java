@@ -32,8 +32,8 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
     static final String PLUGIN_KEY = "vn.momo.plugin.startapp.StartAppBannerPlugin";
     private static final String STARTAPP_SPLASH_AD_ENABLED_KEY = "vn.momo.plugin.startapp.SPLASH_AD_ENABLED";
 
-    private static  Activity mainActivity;
-    private  StartAppAd startAppAd;
+    private static Activity mainActivity;
+    private StartAppAd startAppAd;
 
     /*
       still contain the static registerWith() method to remain compatible
@@ -44,8 +44,8 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
      * Dev still finding a better solution to not keep {@link Activity} as a static field.
      * Keep the method to support embedding v1 logic - using {@link StartAppBannerPlugin#(Registrar)}
      */
-    public  static  Activity getActivity(){
-        return  mainActivity;
+    public static Activity getActivity() {
+        return mainActivity;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
     }
 
     private void pluginLogic(PlatformViewRegistry platformViewRegistry,
-                                    BinaryMessenger messenger) {
+                             BinaryMessenger messenger) {
 
         platformViewRegistry.registerViewFactory(PLUGIN_KEY, new BannerFactory(messenger));
 
@@ -128,14 +128,16 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                             }
 
                             StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG);
-                            StartAppSDK.init(mainActivity, app_id,true);
+                            StartAppSDK.init(mainActivity, app_id, true);
                             Log.i("start_app", "init app_id start.io : " + app_id);
                             result.success(null);
                             break;
-                        case "enableReturnAds" :
+                        case "enableReturnAds":
                             Boolean enable = call.argument("enableReturnAds");
-                            if(enable == null)
+                            if (enable == null)
                                 enable = false;
+                            Log.e("start.io", "enableReturnAds: " + enable);
+
 
                             StartAppSDK.enableReturnAds(enable);
                             result.success(null);
@@ -146,7 +148,7 @@ public class StartAppBannerPlugin implements FlutterPlugin, ActivityAware {
                 });
     }
 
-    private  void bindActivity(Activity activity) {
+    private void bindActivity(Activity activity) {
         Context context = activity.getApplicationContext();
 
         boolean splashAppEnabled = true;
