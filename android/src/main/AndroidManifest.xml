@@ -48,7 +48,8 @@
             android:name="com.startapp.sdk.jobs.SchedulerService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name="com.startapp.sdk.adsbase.remoteconfig.BootCompleteListener">
+        <receiver android:name="com.startapp.sdk.adsbase.remoteconfig.BootCompleteListener"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

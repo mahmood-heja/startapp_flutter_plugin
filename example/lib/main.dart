@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:startapp/startapp.dart';
 
-void main() => runApp(MyApp());
+void main() {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  StartApp.init("208715786");
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -27,14 +33,14 @@ class MyAppState extends State<MyApp> {
             AdBanner(),
 
             // Display StartApp interstitial ad
-            RaisedButton(
+            TextButton(
                 child: Text('Show interstitial ad'),
                 onPressed: () async {
                   await StartApp.showInterstitialAd();
                 }),
 
             // Display StartApp rewarded ad
-            RaisedButton(
+            TextButton(
                 child: Text('Show rewarded ad'),
                 onPressed: () async {
                   await StartApp.showRewardedAd(onVideoCompleted: () {

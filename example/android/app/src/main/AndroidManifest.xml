@@ -7,11 +7,10 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="startapp_example"
         android:icon="@mipmap/ic_launcher">
 
-        <meta-data android:name="com.startapp.sdk.APPLICATION_ID" android:value="demo-id" />
         <meta-data android:name="com.startapp.sdk.RETURN_ADS_ENABLED" android:value="false" />
         <meta-data android:name="vn.momo.plugin.startapp.SPLASH_AD_ENABLED" android:value="false" />
 
@@ -24,7 +23,8 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <meta-data
                 android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
                 android:value="true" />
