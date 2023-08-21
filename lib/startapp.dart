@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 typedef void BannerCreatedCallback(BannerController controller);
-typedef StringToVoidFunc = void Function(String);
+typedef StringToVoidFunc = void Function(String?);
 
 const String PLUGIN_KEY = "vn.momo.plugin.startapp.StartAppBannerPlugin";
 
 class StartApp {
   static const platform = const MethodChannel('flutter_startapp');
-  static VoidCallback onVideoCompleted;
-  static VoidCallback onReceiveAd;
-  static StringToVoidFunc onFailedToReceiveAd;
+  static VoidCallback? onVideoCompleted;
+  static VoidCallback? onReceiveAd;
+  static StringToVoidFunc? onFailedToReceiveAd;
 
   static init(String appId) async {
     await platform.invokeMethod(
@@ -37,9 +37,9 @@ class StartApp {
   }
 
   static showRewardedAd(
-      {VoidCallback onVideoCompleted,
-      VoidCallback onReceiveAd,
-      StringToVoidFunc onFailedToReceiveAd}) async {
+      {VoidCallback? onVideoCompleted,
+      VoidCallback? onReceiveAd,
+      StringToVoidFunc? onFailedToReceiveAd}) async {
     StartApp.onVideoCompleted = onVideoCompleted;
     platform.setMethodCallHandler(_handleMethod);
     await platform.invokeMethod('showRewardedAd');
@@ -49,17 +49,17 @@ class StartApp {
     switch (call.method) {
       case "onVideoCompleted":
         if (onVideoCompleted != null) {
-          onVideoCompleted();
+          onVideoCompleted!();
         }
         break;
       case "onReceiveAd":
         if (onReceiveAd != null) {
-          onReceiveAd();
+          onReceiveAd!();
         }
         break;
       case "onFailedToReceiveAd":
         if (onFailedToReceiveAd != null) {
-          onFailedToReceiveAd(call.arguments);
+          onFailedToReceiveAd!(call.arguments);
         }
         break;
     }
@@ -69,13 +69,13 @@ class StartApp {
 
 class AdBanner extends StatefulWidget {
   const AdBanner({
-    Key key,
+    Key? key,
     this.onCreated,
     this.onFailedToReceiveAd,
   }) : super(key: key);
 
-  final BannerCreatedCallback onCreated;
-  final Function onFailedToReceiveAd;
+  final BannerCreatedCallback? onCreated;
+  final Function? onFailedToReceiveAd;
 
   @override
   State<AdBanner> createState() => _BannerState();
@@ -113,7 +113,7 @@ class _BannerState extends State<AdBanner> {
     if (widget.onCreated == null) {
       return;
     }
-    widget.onCreated(controller);
+    widget.onCreated!(controller);
   }
 
   Future methodCallHandler(MethodCall call) async {
